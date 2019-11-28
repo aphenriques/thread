@@ -5,7 +5,7 @@ C++17 thread utility library.
 Implements:
 
 * thread::Pool: thread pool implementation (based on https://github.com/zserik/ThreadPool)
-* thread::Print: thread-safe print function
+* thread::printer::Print: thread-safe print function
 
 # Build
 
