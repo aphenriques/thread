@@ -18,7 +18,7 @@ Alternatively, build and install the library with:
 
 # Usage
 
-`thread/Pool.hpp`: thread::Pool class:
+[thread/Pool.hpp](lib/thread/Pool.hpp): `thread::Pool` class:
 
 ```c++
 // create thread pool with 4 worker threads
@@ -36,7 +36,7 @@ auto result = pool.enqueue(
 std::cout << result.get() << std::endl;
 ```
 
-`thread/printer.hpp`: thread::printer::print(...) function:
+[thread/printer.hpp](lib/thread/printer.hpp): `thread::printer::print(...)` function:
 
 ```c++
 // thread-safe stdio print function
@@ -46,6 +46,8 @@ thread::printer::print("number", 1, '\n');
 ```
 
 # Example
+
+[sample/main.cpp](sample/main.cpp):
 
 ```c++
 #include <chrono>
