@@ -1,26 +1,30 @@
-#include <iostream>
-#include <vector>
 #include <chrono>
-#include <thread/ThreadPool.hpp>
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <thread/Pool.hpp>
+#include <thread/printer.hpp>
 
 int main() {
-    ThreadPool pool(4);
-    std::vector< std::future<int> > results;
+    thread::Pool pool(4);
+    std::vector<std::future<int>> results;
 
-    for(int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         results.emplace_back(
-            pool.enqueue([i] {
-                std::cout << "hello " << i << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-                std::cout << "world " << i << std::endl;
-                return i*i;
-            })
+            pool.enqueue(
+                [i] {
+                    thread::printer::print('[', i, "] start\n");
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                    thread::printer::print('[', i, "] end\n");
+                    return i;
+                }
+            )
         );
     }
 
-    for(auto && result: results)
-        std::cout << result.get() << ' ';
-    std::cout << std::endl;
+    for(auto &&result : results) {
+        thread::printer::print('[', result.get(), "] result\n");
+    }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
