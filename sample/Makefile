@@ -24,7 +24,7 @@ DEPS:=$(addsuffix .d, $(basename $(SRCS)))
 .PHONY: all run clean
 
 all:
-	cd $(PROJECT_ROOT_DIR)/$(PROJECT_LIB_DIR) && $(MAKE) all
+	cd $(PROJECT_ROOT_DIR)/$(PROJECT_LIB_DIR) && $(MAKE) static
 	$(MAKE) $(TARGET)
 
 run: all
