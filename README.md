@@ -39,7 +39,7 @@ std::cout << result.get() << std::endl;
 [thread/printer.hpp](lib/thread/printer.hpp): `thread::printer::print(...)` function:
 
 ```c++
-// thread-safe stdio print function
+// thread-safe stdout print function
 thread::printer::print("number", 1, '\n');
 // output:
 // number 1
