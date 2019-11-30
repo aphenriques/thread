@@ -22,7 +22,7 @@ int main() {
         );
     }
 
-    for(auto &&result : results) {
+    for (auto &&result : results) {
         thread::printer::print('[', result.get(), "] result\n");
     }
 
