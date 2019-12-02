@@ -10,11 +10,11 @@ namespace thread {
     public:
         Pool(std::size_t numberOfThreads);
 
-        template<class F, class... A>
-        decltype(auto) enqueue(F &&callable, A &&...arguments);
-
         // joins all threads
         ~Pool();
+
+        template<class F, class... A>
+        decltype(auto) enqueue(F &&callable, A &&...arguments);
 
     private:
         std::vector<std::thread> threads_;

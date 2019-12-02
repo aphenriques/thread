@@ -1,15 +1,13 @@
 #include <chrono>
-#include <iostream>
-#include <utility>
 #include <vector>
 #include <thread/Pool.hpp>
 #include <thread/printer.hpp>
 
 int main() {
-    thread::Pool pool(4);
+    thread::Pool pool(2);
     std::vector<std::future<int>> results;
 
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 4; ++i) {
         results.emplace_back(
             pool.enqueue(
                 [i] {

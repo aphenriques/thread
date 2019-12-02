@@ -5,6 +5,7 @@ C++17 thread utility library.
 Implements:
 
 * `thread::Pool`: thread pool implementation (based on https://github.com/zserik/ThreadPool)
+* `thread::Executor`: thread pool executor facility for tasks that do not require return retrieval with futures
 * `thread::printer::print`: thread-safe print function
 
 # Build
@@ -36,6 +37,29 @@ auto result = pool.enqueue(
 std::cout << result.get() << std::endl;
 ```
 
+[thread/Executor.hpp](lib/thread/Executor.hpp): `thread::Executor` class:
+
+```c++
+// create executor thread pool with 4 worker threads
+thread::Executor executor(4);
+
+// enqueue
+executor.enqueue(
+    [](int input) {
+        //...
+    },
+    42
+);
+
+// wait completion of each enqueued task
+executor.join()
+
+// other tasks may be enqueued after calling Executor::join()
+executor.enqueue(otherTask);
+
+// Executor::~Executor() call Executor::join()
+```
+
 [thread/printer.hpp](lib/thread/printer.hpp): `thread::printer::print(...)` function:
 
 ```c++
@@ -43,25 +67,24 @@ std::cout << result.get() << std::endl;
 thread::printer::print("number", 1, '\n');
 // output:
 // number 1
+//
 ```
 
 # Example
 
-[sample/main.cpp](sample/main.cpp):
+[sample/pool/main.cpp](sample/pool/main.cpp):
 
 ```c++
 #include <chrono>
-#include <iostream>
-#include <utility>
 #include <vector>
 #include <thread/Pool.hpp>
 #include <thread/printer.hpp>
 
 int main() {
-    thread::Pool pool(4);
+    thread::Pool pool(2);
     std::vector<std::future<int>> results;
 
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 4; ++i) {
         results.emplace_back(
             pool.enqueue(
                 [i] {
@@ -74,7 +97,7 @@ int main() {
         );
     }
 
-    for(auto &&result : results) {
+    for (auto &&result : results) {
         thread::printer::print('[', result.get(), "] result\n");
     }
 
@@ -83,26 +106,69 @@ int main() {
 // sample output (the order may vary):
 // [0] start
 // [1] start
-// [2] start
-// [3] start
 // [0] end
-// [4] start
-// [0] result
 // [1] end
-// [5] start
+// [2] start
+// [0] result
 // [1] result
+// [3] start
 // [2] end
-// [2] result
-// [6] start
 // [3] end
+// [2] result
 // [3] result
-// [7] start
+```
+
+[sample/executor/main.cpp](sample/executor/main.cpp):
+
+```c++
+#include <chrono>
+#include <iostream>
+#include <thread/Executor.hpp>
+#include <thread/printer.hpp>
+
+int main() {
+    thread::Executor executor(2);
+
+    for (int i = 0; i < 3; ++i) {
+        executor.enqueue(
+            [i] {
+                thread::printer::print('[', i, "] start\n");
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                thread::printer::print('[', i, "] end\n");
+                return i;
+            }
+        );
+    }
+
+    executor.join();
+    std::cout << "--" << std::endl;
+
+    for (int i = 3; i < 6; ++i) {
+        executor.enqueue(
+            [i] {
+                thread::printer::print('[', i, "] start\n");
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                thread::printer::print('[', i, "] end\n");
+                return i;
+            }
+        );
+    }
+
+    // Executor::~Executor() joins
+    return EXIT_SUCCESS;
+}
+// sample output (the order may vary):
+// [0] start
+// [1] start
+// [0] end
+// [1] end
+// [2] start
+// [2] end
+// --
+// [3] start
+// [4] start
+// [3] end
 // [4] end
-// [4] result
+// [5] start
 // [5] end
-// [5] result
-// [6] end
-// [6] result
-// [7] end
-// [7] result
 ```
