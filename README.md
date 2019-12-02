@@ -57,7 +57,7 @@ executor.join()
 // other tasks may be enqueued after calling Executor::join()
 executor.enqueue(otherTask);
 
-// Executor::~Executor() call Executor::join()
+// Executor::~Executor() calls Executor::join()
 ```
 
 [thread/printer.hpp](lib/thread/printer.hpp): `thread::printer::print(...)` function:
