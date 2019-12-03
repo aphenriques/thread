@@ -2,7 +2,7 @@
 
 namespace thread {
     Pool::Pool(std::size_t numberOfThreads) : stopped_(false) {
-        threads_.reserve(4);
+        threads_.reserve(numberOfThreads);
         for(std::size_t i = 0; i < numberOfThreads; ++i) {
             threads_.emplace_back(
                 [this] {
