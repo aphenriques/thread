@@ -30,7 +30,7 @@ int main() {
             }
         );
     }
+    executor.join();
 
-    // Executor::~Executor() calls Executor::join()
     return EXIT_SUCCESS;
 }

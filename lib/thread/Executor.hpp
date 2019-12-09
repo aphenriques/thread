@@ -8,9 +8,6 @@ namespace thread {
     public:
         Executor(std::size_t numberOfThreads);
 
-        // calls Executor::join()
-        ~Executor();
-
         template<class F, class... A>
         void enqueue(F &&callable, A &&...arguments);
 
