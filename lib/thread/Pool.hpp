@@ -18,7 +18,7 @@ namespace thread {
 
     private:
         std::vector<std::thread> threads_;
-        std::queue<std::packaged_task<void()> > tasks_;
+        std::queue<std::packaged_task<void()>> tasks_;
         std::mutex mutex_;
         std::condition_variable condition_;
         bool stopped_;
