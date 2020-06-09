@@ -62,9 +62,9 @@ executor.enqueue(otherTask);
 
 ```c++
 // thread-safe stdout print function
-thread::printer::print("number", 1, '\n');
+thread::printer::print("number = ", 1, '\n');
 // output:
-// number 1
+// number = 1
 //
 ```
 
