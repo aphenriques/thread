@@ -1,18 +1,18 @@
-PROJECT_ROOT_DIR:=../..
+THREAD_ROOT_DIR:=../..
 
-include $(PROJECT_ROOT_DIR)/common.mk
+include $(THREAD_ROOT_DIR)/common.mk
 
 TARGET:=pool
 SRC_DIRS:=. $(wildcard */.)
 FILTER_OUT:=
-INCLUDE_DIRS:=$(PROJECT_STATIC_LIB_INCLUDE_DIR)
+INCLUDE_DIRS:=$(THREAD_STATIC_LIB_INCLUDE_DIR)
 SYSTEM_INCLUDE_DIRS:=
 LIB_DIRS:=
-LDLIBS:=$(PROJECT_STATIC_LIB_LDLIB)
+LDLIBS:=$(THREAD_STATIC_LIB_LDLIB)
 
 # '-isystem <dir>' supress warnings from included headers in <dir>. These headers are also excluded from dependency generation
-CXXFLAGS:=$(PROJECT_CXXFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) $(addprefix -isystem , $(SYSTEM_INCLUDE_DIRS))
-LDFLAGS:=$(PROJECT_EXECUTABLE_LDFLAGS) $(addprefix -L, $(LIB_DIRS))
+CXXFLAGS:=$(THREAD_CXXFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) $(addprefix -isystem , $(SYSTEM_INCLUDE_DIRS))
+LDFLAGS:=$(THREAD_EXECUTABLE_LDFLAGS) $(addprefix -L, $(LIB_DIRS))
 
 ################################################################################
 
@@ -24,13 +24,13 @@ DEPS:=$(addsuffix .d, $(basename $(SRCS)))
 .PHONY: all run clean
 
 all:
-	cd $(PROJECT_ROOT_DIR)/$(PROJECT_LIB_DIR) && $(MAKE) static
+	cd $(THREAD_ROOT_DIR)/$(THREAD_LIB_DIR) && $(MAKE) static
 	$(MAKE) $(TARGET)
 
 run: all
 	./$(TARGET)
 
-$(TARGET): $(OBJS) $(PROJECT_ROOT_DIR)/$(PROJECT_LIB_DIR)/$(PROJECT_STATIC_LIB)
+$(TARGET): $(OBJS) $(THREAD_ROOT_DIR)/$(THREAD_LIB_DIR)/$(THREAD_STATIC_LIB)
 	$(CXX) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
 
 clean:
