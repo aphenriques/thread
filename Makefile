@@ -3,7 +3,7 @@ THREAD_ROOT_DIR:=.
 include common.mk
 
 INSTALL_TOP:=/usr/local
-INSTALL_INC:=$(INSTALL_TOP)/include/$(PROJECT)
+INSTALL_INC:=$(INSTALL_TOP)/include/$(THREAD)
 INSTALL_LIB:=$(INSTALL_TOP)/lib
 
 .PHONY: all static static_release shared shared_release sample install_static install uninstall clean
